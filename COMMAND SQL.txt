@@ -1,0 +1,6 @@
+people_db
+
+Syntax(Oracle,MySQL,MariaDB):
+ 
+ALTER TABLE your_database
+RENAME TO people_db;

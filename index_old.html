@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>People List</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <!-- <h2>Add New Person</h2>
+        <form @submit.prevent="addPerson">
+            <div class="mb-3">
+                <label for="name" class="form-label">Name:</label>
+                <input type="text" class="form-control" v-model="newPerson.name" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Person</button>
+        </form> -->
+    </div>
+    <div id="app" class="container mt-5">
+
+        <h2>Add New Person</h2>
+        <form @submit.prevent="addPerson">
+            <div class="mb-3">
+                <label for="name" class="form-label">Name:</label>
+                <input type="text" class="form-control" v-model="newPerson.name" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Person</button>
+        </form>
+
+        <h1>People List</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="person in people" :key="person.id">
+                    <td>{{ person.id }}</td>
+                    <td>{{ person.name }}</td>
+                    <td>
+                        <button @click="deletePerson(person.id)" class="btn btn-danger">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                people: [],
+                newPerson: {
+                name: ''
+            }
+            },
+            mounted() {
+                this.fetchPeople();
+            },
+            methods: {
+                fetchPeople() {
+                    $.ajax({
+                        url: 'get_people.php',
+                        method: 'GET',
+                        dataType: 'json',
+                        success: (response) => {
+                            this.people = response;
+                            // console.log('w')
+                            // console.log(data.people)
+                        }
+                    });
+                },
+                addPerson() {
+                $.ajax({
+                    url: 'add_person.php',
+                    method: 'POST',
+                    data: { name: this.newPerson.name },
+                    dataType: 'json',
+                    success: (response) => {
+                        // เพิ่มข้อมูลใหม่ลงในรายการแสดงผลทันที
+                        this.people.push(response);
+
+                        // ล้างช่องกรอกข้อมูลหลังเพิ่มเสร็จ
+                        this.newPerson.name = '';
+                    }
+                });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
